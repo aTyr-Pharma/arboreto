@@ -12,13 +12,11 @@ from dask import delayed
 # Compatibility with dask 2024.3+ which removed legacy dataframe implementation
 try:
     from dask.dataframe import from_delayed
-    from dask.dataframe.utils import make_meta
 except (ImportError, NotImplementedError):
     # dask-expr (new query planning) compatibility
     try:
         from dask_expr import from_delayed
         from dask_expr._collection import new_collection
-        make_meta = lambda df: df.head(0)
     except ImportError:
         raise ImportError(
             "Could not import dask.dataframe. Please install dask with dataframe support: "
@@ -386,8 +384,8 @@ def target_gene_indices(gene_names,
         raise ValueError("Unable to interpret target_genes.")
 
 
-_GRN_SCHEMA = make_meta({'TF': str, 'target': str, 'importance': float})
-_META_SCHEMA = make_meta({'target': str, 'n_estimators': int})
+_GRN_SCHEMA = pd.DataFrame({'TF': pd.Series(dtype=str), 'target': pd.Series(dtype=str), 'importance': pd.Series(dtype=float)})
+_META_SCHEMA = pd.DataFrame({'target': pd.Series(dtype=str), 'n_estimators': pd.Series(dtype=int)})
 
 
 def create_graph(expression_matrix,

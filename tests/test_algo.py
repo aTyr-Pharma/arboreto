@@ -38,21 +38,21 @@ class PrepareClientTest(TestCase):
 
         client, shutdown_callback = _prepare_client(passed)
 
-        self.assertEquals(client, passed)
+        self.assertEqual(client, passed)
 
         shutdown_callback()
         passed.close()
         lc.close()
         lc.status
 
-        self.assertEquals(lc.status.value, 'closed')
+        self.assertEqual(lc.status.value, 'closed')
 
     def test_address(self):
         with self.assertRaises(Exception) as context:
             address = 'tcp://127.0.0.2:12345'
             _prepare_client(address)
 
-        self.assertIn('Timed out trying to connect to tcp://127.0.0.2:12345 after 10 s', str(context.exception))
+        self.assertIn('Timed out trying to connect to tcp://127.0.0.2:12345 after 30 s', str(context.exception))
 
     def test_other(self):
         with self.assertRaises(Exception) as context:
@@ -76,9 +76,9 @@ class PrepareInputTest(TestCase):
                                  tf_names=tfs)
 
         self.assertTrue(isinstance(m, np.ndarray))
-        self.assertEquals((500, 50), m.shape)
-        self.assertEquals(50, len(g))
-        self.assertEquals(4, len(t))
+        self.assertEqual((500, 50), m.shape)
+        self.assertEqual(50, len(g))
+        self.assertEqual(4, len(t))
 
     def test_numpy_dense_matrix(self):
         m, g, t = _prepare_input(expression_data=df.to_numpy(),
@@ -86,9 +86,9 @@ class PrepareInputTest(TestCase):
                                  tf_names=tfs)
 
         self.assertTrue(isinstance(m, np.ndarray))
-        self.assertEquals((500, 50), m.shape)
-        self.assertEquals(50, len(g))
-        self.assertEquals(4, len(t))
+        self.assertEqual((500, 50), m.shape)
+        self.assertEqual(50, len(g))
+        self.assertEqual(4, len(t))
 
     def test_scipy_csc_matrix(self):
         csc = csc_matrix(df.to_numpy())
@@ -98,9 +98,9 @@ class PrepareInputTest(TestCase):
                                  tf_names=tfs)
 
         self.assertTrue(isinstance(m, csc_matrix))
-        self.assertEquals((500, 50), m.shape)
-        self.assertEquals(50, len(g))
-        self.assertEquals(4, len(t))
+        self.assertEqual((500, 50), m.shape)
+        self.assertEqual(50, len(g))
+        self.assertEqual(4, len(t))
 
 
 class LaunchTests(TestCase):
